@@ -1,0 +1,2 @@
+# MermaidToken
+solidity contract

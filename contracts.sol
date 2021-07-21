@@ -738,7 +738,7 @@ interface IUniswapV2Router02 is IUniswapV2Router01 {
 }
 
 
-contract LiZhang is Context, IERC20, Ownable {
+contract Mermaid is Context, IERC20, Ownable {
     using SafeMath for uint256;
     using Address for address;
 
@@ -756,8 +756,8 @@ contract LiZhang is Context, IERC20, Ownable {
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
-    string private constant _name = "Li Zhang";
-    string private constant _symbol = "LZ";
+    string private constant _name = "Mermaid";
+    string private constant _symbol = "MMD";
     uint8 private constant _decimals = 9;
 
     uint256 public _taxFee = 3;
@@ -801,7 +801,7 @@ contract LiZhang is Context, IERC20, Ownable {
     constructor () public {
         _rOwned[_msgSender()] = _rTotal;
 
-        IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0x10ED43C718714eb63d5aA57B78B54704E256024E);
+        IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0x10ED43C718714eb63d5aA57B78B54704E256024E); //pancake swap V2
          // Create a uniswap pair for this new token
         uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
             .createPair(address(this), _uniswapV2Router.WETH());

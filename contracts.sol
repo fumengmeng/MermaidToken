@@ -762,7 +762,7 @@ contract Mermaid is Context, IERC20, Ownable {
     bool inSwapAndLiquify;
     bool public swapAndLiquifyEnabled = true;
 
-    uint256 public constant _maxTxAmount = 20000000 * 10**7 * 10**9;
+    uint256 public _maxTxAmount = 20000000 * 10**7 * 10**9;
     uint256 private constant numTokensSellToAddToLiquidity = 2000000 * 10**7 * 10**9;
 
     event MinTokensBeforeSwapUpdated(uint256 minTokensBeforeSwap);
@@ -925,6 +925,12 @@ contract Mermaid is Context, IERC20, Ownable {
     
     function setLiquidityFeePercent(uint256 liquidityFee) external onlyOwner() {
         _liquidityFee = liquidityFee;
+    }
+
+    function setMaxTxPercent(uint256 maxTxPercent) external onlyOwner() {
+        _maxTxAmount = _tTotal.mul(maxTxPercent).div(
+            10**3
+        );
     }
 
     function setSwapAndLiquifyEnabled(bool _enabled) public onlyOwner {

@@ -743,9 +743,9 @@ contract Mermaid is Context, IERC20, Ownable {
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
-    string private constant _name = "Mermaid";
-    string private constant _symbol = "MMD";
-    uint8 private constant _decimals = 9;
+    string private _name = "Mermaid";
+    string private _symbol = "MMD";
+    uint8 private _decimals = 9;
 
     uint256 public _taxFee = 5;
     uint256 private _previousTaxFee = _taxFee;
@@ -969,7 +969,7 @@ contract Mermaid is Context, IERC20, Ownable {
         uint256 rFee = tFee.mul(currentRate);
         uint256 rLiquidity = tLiquidity.mul(currentRate);
         uint256 rBurn = tBurn.mul(currentRate);
-        uint256 rTransferAmount = rAmount.sub(rFee).sub(rLiquidity);
+        uint256 rTransferAmount = rAmount.sub(rFee).sub(rLiquidity).sub(rBurn);
         return (rAmount, rTransferAmount, rFee);
     }
 

@@ -736,7 +736,7 @@ contract Mermaid is Context, IERC20, Ownable {
 
     mapping (address => bool) private _isExcluded;
     address[] private _excluded;
-    address public constant _burnWalletAddress = 0x000000000000000000000000000000000000dEaD;
+    address private constant _burnWalletAddress = 0x000000000000000000000000000000000000dEaD;
 
     uint256 private constant MAX = ~uint256(0);
     uint256 private constant _tTotal = 10000000000 * 10**7 * 10**9;
@@ -884,7 +884,6 @@ contract Mermaid is Context, IERC20, Ownable {
 
     function excludeFromReward(address account) public onlyOwner() {
         require(!_isExcluded[account], "Account is already excluded");
-        require(_excludedFromReward.length < 50, "Excluded list too long");
         if(_rOwned[account] > 0) {
             _tOwned[account] = tokenFromReflection(_rOwned[account]);
         }

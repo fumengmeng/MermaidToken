@@ -1159,11 +1159,11 @@ contract Mermaid is Context, IERC20, Ownable {
         if (_isExcluded[sender] && !_isExcluded[recipient]) {
             _transferFromExcluded(sender, recipient, amount);
         } else if (!_isExcluded[sender] && _isExcluded[recipient]) {
-            _transferFromExcluded(sender, recipient, amount);
+            _transferToExcluded(sender, recipient, amount);
         } else if (_isExcluded[sender] && _isExcluded[recipient]) {
-            _transferFromExcluded(sender, recipient, amount);
+            _transferBothExcluded(sender, recipient, amount);
         } else {
-            _transferFromExcluded(sender, recipient, amount);
+            _transferStandard(sender, recipient, amount);
         }
         
         if(!takeFee)

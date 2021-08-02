@@ -736,6 +736,7 @@ contract Mermaid is Context, IERC20, Ownable {
 
     mapping (address => bool) private _isExcluded;
     address[] private _excluded;
+    address public constant _burnWalletAddress = 0x000000000000000000000000000000000000dEaD;
 
     uint256 private constant MAX = ~uint256(0);
     uint256 private constant _tTotal = 10000000000 * 10**7 * 10**9;
@@ -753,7 +754,6 @@ contract Mermaid is Context, IERC20, Ownable {
     uint256 private _previousLiquidityFee = _liquidityFee;
     
     uint256 public _burnFee = 4;
-    address public constant burnWallet = 0x000000000000000000000000000000000000dEaD;
     uint256 private _previousBurnFee = _burnFee;
 
     IUniswapV2Router02 public immutable uniswapV2Router;
@@ -912,10 +912,6 @@ contract Mermaid is Context, IERC20, Ownable {
         _isExcludedFromFee[account] = false;
     }
     
-    function setChartityFeePercent(uint256 charityFee) external onlyOwner() {
-        _charityFee = charityFee;
-    }
-    
     function setBurnFeePercent(uint256 burnFee) external onlyOwner() {
         _burnFee = burnFee;
     }
@@ -1031,7 +1027,6 @@ contract Mermaid is Context, IERC20, Ownable {
        _liquidityFee = _previousLiquidityFee;
        _burnFee = _previousBurnFee;
     }
-
     
     function isExcludedFromFee(address account) public view returns(bool) {
         return _isExcludedFromFee[account];
@@ -1162,18 +1157,6 @@ contract Mermaid is Context, IERC20, Ownable {
             _transferFromExcluded(sender, recipient, amount);
         }
         
-        //Temporarily remove fees to transfer to burn address and charity wallet
-        _taxFee = 0;
-        _liquidityFee = 0;
-
-
-        _transferStandard(sender, burnWallet, burnAmt);
-        _transferStandard(sender, charityWallet, charityAmt);
-
-        //Restore tax and liquidity fees
-        _taxFee = _previousTaxFee;
-        _liquidityFee = _previousLiquidityFee;
-
         if(!takeFee)
             restoreAllFee();
     }

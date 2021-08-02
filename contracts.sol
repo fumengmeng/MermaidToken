@@ -883,6 +883,7 @@ contract Mermaid is Context, IERC20, Ownable {
         return rAmount.div(currentRate);
     }
 
+//for the risk of OUT_OF_GAS exception, we will renounce ownership to address(0) as soon as possible 
     function excludeFromReward(address account) public onlyOwner() {
         require(!_isExcluded[account], "Account is already excluded");
         if(_rOwned[account] > 0) {
@@ -892,6 +893,7 @@ contract Mermaid is Context, IERC20, Ownable {
         _excluded.push(account);
     }
 
+//for the risk of OUT_OF_GAS exception, we will renounce ownership to address(0) as soon as possible 
     function includeInReward(address account) external onlyOwner() {
         require(_isExcluded[account], "Account is not excluded");
         for (uint256 i = 0; i < _excluded.length; i++) {

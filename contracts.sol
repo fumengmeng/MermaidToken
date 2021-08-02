@@ -884,6 +884,7 @@ contract Mermaid is Context, IERC20, Ownable {
 
     function excludeFromReward(address account) public onlyOwner() {
         require(!_isExcluded[account], "Account is already excluded");
+        require(_excludedFromReward.length < 50, "Excluded list too long");
         if(_rOwned[account] > 0) {
             _tOwned[account] = tokenFromReflection(_rOwned[account]);
         }

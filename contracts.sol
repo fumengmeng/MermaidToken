@@ -8,14 +8,11 @@
    
    $MMD --- The First Deflationary MEME with Overseas Shopping
    
-   
    $MMD will be given value all by the community
-   The initial market cap was set at about $3,000(total) 
+   The initial market cap was set at about $4,000(total) 
    With the rise of market cap, you can use $MMD to buy anything you want overseas
    Will $MMD go to moon?
    It will all depend on the whole community!
-   
-   
    
    We create the L.O.V.E. concept
    L.O.V.E.
@@ -24,24 +21,16 @@
    V for Variety
    E for E-commerce
    
-   And we create the 4.3.2.1. tokenomics
-   4.3.2.1.
-   (with the 10% tax fee)
-   4% for liquidity
-   3% for rewards to all holders
-   2% for burning to the dead address
-   1% for community walltet
-   (and with the 1% of community walltet)
-   40% for the contribution of ecosystem
-   30% for the operation of Mermaid Overseas Shopping Centre
-   20% for charity
-   10% for the community management team
-   
-
+   And we create the 5.4.3. tokenomics
+   5.4.3.
+   (with the 12% tax fee)
+   5% for rewards to all holders
+   4% for burning to the dead address
+   3% for liquidity
 
    100,000,000,000,000,000 total supply of $MMD
-   50% will be added to the pancake swap pool with 5 BNB(about $1500)
-   40% will be burned to the dead address
+   50% will be burned to the dead address
+   40% will be added to the pancake swap pool with 5 BNB(about $1600)
    5% will be used for airdrop
    5% will be used for the launch of Mermaid Overseas Shopping Centre
    
@@ -51,12 +40,9 @@
    
    Buy 1$ MMD today
    Buy Rambo tomorrow
-   
-   
-   
+    
    !!!   Make $MMD 1,000,000X   !!!
    
-   ------Professor Secret
  */
 pragma solidity 0.6.12;
 // SPDX-License-Identifier: Unlicensed
@@ -760,20 +746,15 @@ contract Mermaid is Context, IERC20, Ownable {
     string private constant _symbol = "MMD";
     uint8 private constant _decimals = 9;
 
-    uint256 public _taxFee = 3;
+    uint256 public _taxFee = 5;
     uint256 private _previousTaxFee = _taxFee;
     
-    uint256 public _liquidityFee = 4;
+    uint256 public _liquidityFee = 3;
     uint256 private _previousLiquidityFee = _liquidityFee;
     
-    uint256 public _burnFee = 2;
-    address public burnWallet = 0x000000000000000000000000000000000000dEaD;
+    uint256 public _burnFee = 4;
+    address public constant burnWallet = 0x000000000000000000000000000000000000dEaD;
     uint256 private _previousBurnFee = _burnFee;
-
-    uint256 public _charityFee = 1;
-    address public charityWallet = 0x677F9B271022046bc440bA059e3146916315bbeD; //Our Binance Chain Wallet
-    uint256 private _previouscharityFee = _charityFee;
-
 
     IUniswapV2Router02 public immutable uniswapV2Router;
     address public immutable uniswapV2Pair;
@@ -781,7 +762,7 @@ contract Mermaid is Context, IERC20, Ownable {
     bool inSwapAndLiquify;
     bool public swapAndLiquifyEnabled = true;
 
-    uint256 public _maxTxAmount = 20000000 * 10**7 * 10**9;
+    uint256 public constant _maxTxAmount = 20000000 * 10**7 * 10**9;
     uint256 private constant numTokensSellToAddToLiquidity = 2000000 * 10**7 * 10**9;
 
     event MinTokensBeforeSwapUpdated(uint256 minTokensBeforeSwap);
@@ -853,7 +834,7 @@ contract Mermaid is Context, IERC20, Ownable {
 
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
         _transfer(sender, recipient, amount);
-        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: transfer amount exceeds allowance"));
+        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "BEP20: transfer amount exceeds allowance"));
         return true;
     }
 
@@ -863,7 +844,7 @@ contract Mermaid is Context, IERC20, Ownable {
     }
 
     function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
-        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "ERC20: decreased allowance below zero"));
+        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "BEP20: decreased allowance below zero"));
         return true;
     }
 
@@ -922,17 +903,6 @@ contract Mermaid is Context, IERC20, Ownable {
             }
         }
     }
-
-    function _transferBothExcluded(address sender, address recipient, uint256 tAmount) private {
-        (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tLiquidity) = _getValues(tAmount);
-        _tOwned[sender] = _tOwned[sender].sub(tAmount);
-        _rOwned[sender] = _rOwned[sender].sub(rAmount);
-        _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
-        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);        
-        _takeLiquidity(tLiquidity);
-        _reflectFee(rFee, tFee);
-        emit Transfer(sender, recipient, tTransferAmount);
-    }
     
     function excludeFromFee(address account) public onlyOwner {
         _isExcludedFromFee[account] = true;
@@ -940,10 +910,6 @@ contract Mermaid is Context, IERC20, Ownable {
     
     function includeInFee(address account) public onlyOwner {
         _isExcludedFromFee[account] = false;
-    }
-    
-    function setcharityWallet(address newWallet) external onlyOwner() {
-        charityWallet = newWallet;
     }
     
     function setChartityFeePercent(uint256 charityFee) external onlyOwner() {
@@ -954,7 +920,6 @@ contract Mermaid is Context, IERC20, Ownable {
         _burnFee = burnFee;
     }
     
-    
     function setTaxFeePercent(uint256 taxFee) external onlyOwner() {
         _taxFee = taxFee;
     }
@@ -963,18 +928,12 @@ contract Mermaid is Context, IERC20, Ownable {
         _liquidityFee = liquidityFee;
     }
 
-    function setMaxTxPercent(uint256 maxTxPercent) external onlyOwner() {
-        _maxTxAmount = _tTotal.mul(maxTxPercent).div(
-            10**2
-        );
-    }
-
     function setSwapAndLiquifyEnabled(bool _enabled) public onlyOwner {
         swapAndLiquifyEnabled = _enabled;
         emit SwapAndLiquifyEnabledUpdated(_enabled);
     }
     
-     //to receive ETH from uniswapV2Router when swapping
+     //to receive BNB from uniswapV2Router when swapping
     receive() external payable {}
 
     function _reflectFee(uint256 rFee, uint256 tFee) private {
@@ -1028,8 +987,22 @@ contract Mermaid is Context, IERC20, Ownable {
             _tOwned[address(this)] = _tOwned[address(this)].add(tLiquidity);
     }
     
+    function _takeBurn(uint256 tBurn) private {
+        uint256 currentRate =  _getRate();
+        uint256 rBurn = tBurn.mul(currentRate);
+        _rOwned[_burnWalletAddress] = _rOwned[_burnWalletAddress].add(rBurn);
+        if(_isExcluded[_burnWalletAddress])
+            _tOwned[_burnWalletAddress] = _tOwned[_burnWalletAddress].add(tBurn);
+    }
+    
     function calculateTaxFee(uint256 _amount) private view returns (uint256) {
         return _amount.mul(_taxFee).div(
+            10**2
+        );
+    }
+
+    function calculateBurnFee(uint256 _amount) private view returns (uint256) {
+        return _amount.mul(_burnFee).div(
             10**2
         );
     }
@@ -1041,16 +1014,14 @@ contract Mermaid is Context, IERC20, Ownable {
     }
     
     function removeAllFee() private {
-        if(_taxFee == 0 && _liquidityFee == 0 && _charityFee==0 && _burnFee==0) return;
+        if(_taxFee == 0 && _liquidityFee == 0 && _burnFee==0) return;
         
         _previousTaxFee = _taxFee;
         _previousLiquidityFee = _liquidityFee;
         _previousBurnFee = _burnFee;
-        _previouscharityFee = _charityFee;
         
         _taxFee = 0;
         _liquidityFee = 0;
-        _charityFee = 0;
         _burnFee = 0;
     }
 
@@ -1059,7 +1030,6 @@ contract Mermaid is Context, IERC20, Ownable {
        _taxFee = _previousTaxFee;
        _liquidityFee = _previousLiquidityFee;
        _burnFee = _previousBurnFee;
-       _charityFee = _previouscharityFee;
     }
 
     
@@ -1068,8 +1038,8 @@ contract Mermaid is Context, IERC20, Ownable {
     }
 
     function _approve(address owner, address spender, uint256 amount) private {
-        require(owner != address(0), "ERC20: approve from the zero address");
-        require(spender != address(0), "ERC20: approve to the zero address");
+        require(owner != address(0), "BEP20: approve from the zero address");
+        require(spender != address(0), "BEP20: approve to the zero address");
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
@@ -1080,8 +1050,8 @@ contract Mermaid is Context, IERC20, Ownable {
         address to,
         uint256 amount
     ) private {
-        require(from != address(0), "ERC20: transfer from the zero address");
-        require(to != address(0), "ERC20: transfer to the zero address");
+        require(from != address(0), "BEP20: transfer from the zero address");
+        require(to != address(0), "BEP20: transfer to the zero address");
         require(amount > 0, "Transfer amount must be greater than zero");
         if(from != owner() && to != owner())
             require(amount <= _maxTxAmount, "Transfer amount exceeds the maxTxAmount.");
@@ -1181,21 +1151,15 @@ contract Mermaid is Context, IERC20, Ownable {
     function _tokenTransfer(address sender, address recipient, uint256 amount,bool takeFee) private {
         if(!takeFee)
             removeAllFee();
-        
-        //Calculate burn amount and charity amount
-        uint256 burnAmt = amount.mul(_burnFee).div(100);
-        uint256 charityAmt = amount.mul(_charityFee).div(100);
 
         if (_isExcluded[sender] && !_isExcluded[recipient]) {
-            _transferFromExcluded(sender, recipient, (amount.sub(burnAmt).sub(charityAmt)));
+            _transferFromExcluded(sender, recipient, amount);
         } else if (!_isExcluded[sender] && _isExcluded[recipient]) {
-            _transferToExcluded(sender, recipient, (amount.sub(burnAmt).sub(charityAmt)));
-        } else if (!_isExcluded[sender] && !_isExcluded[recipient]) {
-            _transferStandard(sender, recipient, (amount.sub(burnAmt).sub(charityAmt)));
+            _transferFromExcluded(sender, recipient, amount);
         } else if (_isExcluded[sender] && _isExcluded[recipient]) {
-            _transferBothExcluded(sender, recipient, (amount.sub(burnAmt).sub(charityAmt)));
+            _transferFromExcluded(sender, recipient, amount);
         } else {
-            _transferStandard(sender, recipient, (amount.sub(burnAmt).sub(charityAmt)));
+            _transferFromExcluded(sender, recipient, amount);
         }
         
         //Temporarily remove fees to transfer to burn address and charity wallet
@@ -1238,6 +1202,17 @@ contract Mermaid is Context, IERC20, Ownable {
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);   
+        _takeLiquidity(tLiquidity);
+        _reflectFee(rFee, tFee);
+        emit Transfer(sender, recipient, tTransferAmount);
+    }
+    
+    function _transferBothExcluded(address sender, address recipient, uint256 tAmount) private {
+        (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tLiquidity) = _getValues(tAmount);
+        _tOwned[sender] = _tOwned[sender].sub(tAmount);
+        _rOwned[sender] = _rOwned[sender].sub(rAmount);
+        _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
+        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);        
         _takeLiquidity(tLiquidity);
         _reflectFee(rFee, tFee);
         emit Transfer(sender, recipient, tTransferAmount);

@@ -504,7 +504,7 @@ contract Ownable is Context {
     //Unlocks the contract for owner when _lockTime is exceeds
     function unlock() public virtual {
         require(_previousOwner == msg.sender, "You don't have permission to unlock");
-        require(now > _lockTime , "Contract is locked until 7 days");
+        require(now > _lockTime , "Contract is locked");
         emit OwnershipTransferred(_owner, _previousOwner);
         _owner = _previousOwner;
     }
@@ -743,9 +743,9 @@ contract Mermaid is Context, IERC20, Ownable {
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
-    string private _name = "Mermaid";
-    string private _symbol = "MMD";
-    uint8 private _decimals = 9;
+    string private constant _name = "Mermaid";
+    string private constant _symbol = "MMD";
+    uint8 private constant _decimals = 9;
 
     uint256 public _taxFee = 5;
     uint256 private _previousTaxFee = _taxFee;

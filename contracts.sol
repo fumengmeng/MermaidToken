@@ -740,7 +740,7 @@ contract Mermaid is Context, IERC20, Ownable {
     address private constant _burnWalletAddress = 0x000000000000000000000000000000000000dEaD;
 
     uint256 private constant MAX = ~uint256(0);
-    uint256 private constant _tTotal = 10000000000 * 10**7 * 10**9;
+    uint256 private constant _tTotal = 10000000 * 10**7 * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
@@ -763,8 +763,8 @@ contract Mermaid is Context, IERC20, Ownable {
     bool inSwapAndLiquify;
     bool public swapAndLiquifyEnabled = true;
 
-    uint256 public _maxTxAmount = 20000000 * 10**7 * 10**9;
-    uint256 private constant numTokensSellToAddToLiquidity = 2000000 * 10**7 * 10**9;
+    uint256 public _maxTxAmount = 20000 * 10**7 * 10**9;
+    uint256 private constant numTokensSellToAddToLiquidity = 2000 * 10**7 * 10**9;
 
     event MinTokensBeforeSwapUpdated(uint256 minTokensBeforeSwap);
     event SwapAndLiquifyEnabledUpdated(bool enabled);

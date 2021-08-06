@@ -28,7 +28,8 @@
    4% for burning to the dead address
    3% for liquidity
 
-   100,000,000,000,000,000 total supply of $MMD
+   100,000,000,000,000 total supply of $MMD
+   10% of $SHIB, 100% of $AKITA
    50% will be burned to the dead address
    40% will be added to the pancake swap pool with 5 BNB(about $1600)
    5% will be used for airdrop
